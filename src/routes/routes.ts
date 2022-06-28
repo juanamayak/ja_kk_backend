@@ -1,15 +1,14 @@
 import {Application} from 'express';
 
 /* Controllers */
-import ExampleController from "../controllers/example.controller";
+import {RegisterController} from "../controllers/register.controller";
 
 /* Middlewares */
 
-class Routes {
-    public exampleController: ExampleController = new ExampleController();
+export class Routes {
+    public registerController: RegisterController = new RegisterController();
     public routes(app: Application) {
-        app.route('/api/example').get(this.exampleController.example)
+        /* Rout for kids register */
+        app.route('/api/register').post(this.registerController.register)
     }
 }
-
-export default Routes;

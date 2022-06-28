@@ -1,6 +1,11 @@
+// tslint:disable-next-line:no-var-requires
 require('dotenv').config()
 import express, {Application} from 'express';
-import Routes from "../routes/routes";
+import Relationship from './relationships';
+import bodyParser from 'body-parser';
+import useragent from 'express-useragent';
+import helmet from 'helmet';
+import {Routes} from "../routes/routes";
 import {Database} from './database'
 import https from 'https';
 import http from 'http';
@@ -24,8 +29,18 @@ class Server {
     }
 
     private config() { // configuración inicial del servidor
+        Relationship.init();
+
         // CORS
         this.app.use(cors());
+
+        this.app.use(useragent.express())
+        this.app.use(helmet())
+
+        this.app.use(helmet.permittedCrossDomainPolicies())
+        this.app.use(helmet.referrerPolicy({ policy: 'strict-origin' }))
+        this.app.use(bodyParser.json({ limit: '50mb' }))
+        this.app.use(bodyParser.urlencoded({ extended: false }))
 
         // Aqui podemos meter más seguridad con Helmet
     }
@@ -45,7 +60,7 @@ class Server {
     }
 
     private async database() {
-        let connection = await Server.database.connection()
+        const connection = await Server.database.connection()
         console.log(connection.message)
     }
 }
