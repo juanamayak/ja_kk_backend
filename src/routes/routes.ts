@@ -4,6 +4,7 @@ import {Application} from 'express';
 import {RegisterController} from "../controllers/register.controller";
 
 /* Middlewares */
+import {validateCreate} from '../validators/register.validator';
 
 export class Routes {
     public registerController: RegisterController = new RegisterController();
