@@ -94,11 +94,11 @@ RegisterModel.init({
         },
         who_invites_name: {
             type: DataTypes.STRING(150),
-            allowNull: true
+            allowNull: false
         },
         qr_code: {
             type: DataTypes.STRING(150),
-            allowNull: false
+            allowNull: true
         },
     }, {
         sequelize: database,

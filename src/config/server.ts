@@ -4,6 +4,7 @@ import express, {Application} from 'express';
 import Relationship from './relationships';
 import bodyParser from 'body-parser';
 import useragent from 'express-useragent';
+import fileUpload from 'express-fileupload'
 import helmet from 'helmet';
 import {Routes} from "../routes/routes";
 import {Database} from './database'
@@ -43,6 +44,7 @@ class Server {
         this.app.use(bodyParser.urlencoded({ extended: false }))
 
         // Aqui podemos meter más seguridad con Helmet
+        this.app.use(fileUpload());
     }
 
     private securityProtocol() {
