@@ -13,5 +13,6 @@ export class Routes {
         app.route('/api/register').post(this.registerController.register);
         app.route('/api/register/:id').get(this.registerController.show);
         app.route('/api/register/qr/:id').get(this.registerController.getQRCodeImage);
+        app.route('/api/register/confirmation/:id').get(this.registerController.confirmation);
     }
 }

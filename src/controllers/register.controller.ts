@@ -16,6 +16,24 @@ export class RegisterController {
 
         const register = await RegisterController.kidsQuery.show(registerId);
 
+        if (!register.ok || !register.register) {
+            return res.status(400).json({
+                ok: false,
+                message: 'No se encontro el registro solicitado'
+            })
+        }
+
+        return res.status(200).json({
+            ok: true,
+            register: register.register,
+        });
+    }
+
+    public async confirmation(req: Request, res: Response) {
+        const registerId = req.params.id;
+
+        const register = await RegisterController.kidsQuery.show(registerId);
+
         if (!register.ok) {
             return res.status(400).json({
                 ok: false,
@@ -83,7 +101,7 @@ export class RegisterController {
         }
 
         const registerId = kid.kid? kid.kid.id : null;
-        QRCode.toDataURL(`http://192.168.100.234:4200/verificacion/${registerId}`, {
+        QRCode.toDataURL(`/verificacion/${registerId}`, {
             errorCorrectionLevel: 'H',
             type: 'image/jpeg',
             margin: 1
