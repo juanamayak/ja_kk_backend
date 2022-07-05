@@ -35,6 +35,20 @@ export class CheckinAndOutQuery {
         }
     }
 
+    public async indexByRegister(registerId: any) {
+        try {
+            const checkins = await CheckInAndOutModel.findAll({
+                where: {
+                    register_id: registerId
+                }
+            })
+            return {ok: true, checkins}
+        } catch (e) {
+            console.log(e);
+            return {ok: false}
+        }
+    }
+
     public async checkin(data: any) {
         try {
             const record = {
