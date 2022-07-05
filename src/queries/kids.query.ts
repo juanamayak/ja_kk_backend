@@ -17,6 +17,16 @@ export class KidsQuery {
         }
     }
 
+    public async index() {
+        try {
+            const registers = await RegisterModel.findAll();
+            return {ok: true, registers}
+        } catch (e) {
+            console.log(e);
+            return {ok: false}
+        }
+    }
+
     public async register(data: any) {
         try {
             const kid = await RegisterModel.create(data);

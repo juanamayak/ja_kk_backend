@@ -29,6 +29,23 @@ export class RegisterController {
         });
     }
 
+    public async index(req: Request, res: Response) {
+
+        const registers = await RegisterController.kidsQuery.index();
+
+        if (!registers.ok) {
+            return res.status(400).json({
+                ok: false,
+                message: 'No se encontro el registro solicitado'
+            })
+        }
+
+        return res.status(200).json({
+            ok: true,
+            registers: registers.registers,
+        });
+    }
+
     public async confirmation(req: Request, res: Response) {
         const registerId = req.params.id;
 

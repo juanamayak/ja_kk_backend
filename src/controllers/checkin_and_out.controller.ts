@@ -20,6 +20,17 @@ export class CheckinAndOutController {
         });
     }
 
+    public async indexByRegister(req: Request, res: Response) {
+        const registerId = req.params.register_id;
+
+        const checkins = await CheckinAndOutController.checkinAndOutQuery.indexByRegister(registerId);
+
+        return res.status(200).json({
+            ok: true,
+            checkins: checkins.checkins,
+        });
+    }
+
     public async checkin(req: Request, res: Response) {
 
         const data = req.body;
