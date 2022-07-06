@@ -3,6 +3,7 @@ import {Application} from 'express';
 /* Controllers */
 import {RegisterController} from "../controllers/register.controller";
 import {CheckinAndOutController} from "../controllers/checkin_and_out.controller";
+import {SessionController} from "../controllers/session.controller";
 
 /* Middlewares */
 import {validateCreate} from '../validators/register.validator';
@@ -10,7 +11,10 @@ import {validateCreate} from '../validators/register.validator';
 export class Routes {
     public registerController: RegisterController = new RegisterController();
     public checkinAndOutController: CheckinAndOutController = new CheckinAndOutController();
+    public sessionController: SessionController = new SessionController();
     public routes(app: Application) {
+        /* Routes for admins */
+        app.route('/api/login').post(this.sessionController.login)
         /* Routes for kids register */
         app.route('/api/register').post(validateCreate, this.registerController.register);
         app.route('/api/register').get(this.registerController.index);
