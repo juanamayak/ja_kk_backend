@@ -26,6 +26,7 @@ export class RegisterModel extends Model {
     public invited_by_mdf_member: any;
     public inviters_name: any;
     public qr_code: any;
+    public terms: any;
     public createdAt: any;
     public updatedAt: any;
 }
@@ -130,6 +131,10 @@ RegisterModel.init({
         qr_code: {
             type: DataTypes.STRING(150),
             allowNull: true
+        },
+        terms: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
     }, {
         sequelize: database,
