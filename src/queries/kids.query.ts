@@ -1,5 +1,7 @@
 import {Op} from 'sequelize';
 import {RegisterModel} from '../models/register.model';
+import {CheckInAndOutModel} from "../models/checkin_and_out.model";
+import moment from "moment";
 
 export class KidsQuery {
 
@@ -19,7 +21,14 @@ export class KidsQuery {
 
     public async index() {
         try {
-            const registers = await RegisterModel.findAll();
+            const registers = await RegisterModel.findAll({
+                include: [
+                    {
+                        model: CheckInAndOutModel,
+                        order: [['createdAt', 'DESC']]
+                    }
+                ]
+            });
             return {ok: true, registers}
         } catch (e) {
             console.log(e);

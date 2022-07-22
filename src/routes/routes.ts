@@ -23,6 +23,7 @@ export class Routes {
         app.route('/api/register/confirmation/:id').get(this.registerController.confirmation);
 
         /* Routes for check in and out*/
+        app.route('/api/checkinAndOut/index').get(this.checkinAndOutController.indexToday);
         app.route('/api/checkinAndOut/index/:register_id').get(this.checkinAndOutController.indexByRegister);
         app.route('/api/checkinAndOut/:id').get(this.checkinAndOutController.showByRegister);
         app.route('/api/checkinAndOut/checkin').post(this.checkinAndOutController.checkin);
