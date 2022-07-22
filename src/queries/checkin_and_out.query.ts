@@ -5,6 +5,16 @@ import moment from "moment";
 
 export class CheckinAndOutQuery {
 
+    public async index() {
+        try {
+            const checkins = await CheckInAndOutModel.findAll();
+            return {ok: true, checkins}
+        } catch (e) {
+            console.log(e);
+            return {ok: false}
+        }
+    }
+
     public async show(checkinId: any) {
         try {
             const checkin = await CheckInAndOutModel.findOne({

@@ -9,6 +9,16 @@ export class CheckinAndOutController {
 
     static checkinAndOutQuery: CheckinAndOutQuery = new CheckinAndOutQuery();
 
+    public async indexToday(req: Request, res: Response) {
+
+        const checkins = await CheckinAndOutController.checkinAndOutQuery.index();
+
+        return res.status(200).json({
+            ok: true,
+            checkins: checkins.checkins,
+        });
+    }
+
     public async showByRegister(req: Request, res: Response) {
         const registerId = req.params.id;
 
