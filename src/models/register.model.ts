@@ -21,6 +21,7 @@ export class RegisterModel extends Model {
     public ap_cellphone_two: any;
     public kid_allergy: any;
     public allergy_description: any;
+    public health_condition: any;
     public mdf_member: any;
     public email: any;
     public invited_by_mdf_member: any;
@@ -111,6 +112,10 @@ RegisterModel.init({
         allergy_description: {
             type: DataTypes.STRING(255),
             allowNull: false
+        },
+        health_condition: {
+            type: DataTypes.STRING(255),
+            allowNull: true
         },
         mdf_member: {
             type: DataTypes.INTEGER,
