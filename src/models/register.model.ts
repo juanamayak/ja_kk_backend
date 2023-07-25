@@ -23,7 +23,7 @@ export class RegisterModel extends Model {
     public allergy_description: any;
     public health_condition: any;
     public mdf_member: any;
-    public email: any;
+    public church: any;
     public invited_by_mdf_member: any;
     public inviters_name: any;
     public qr_code: any;
@@ -121,9 +121,9 @@ RegisterModel.init({
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        email: {
-            type: DataTypes.STRING(100),
-            allowNull: false
+        church: {
+            type: DataTypes.STRING(255),
+            allowNull: true
         },
         invited_mdf_member: {
             type: DataTypes.INTEGER,
