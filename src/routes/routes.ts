@@ -28,5 +28,8 @@ export class Routes {
         app.route('/api/checkinAndOut/:id').get(this.checkinAndOutController.showByRegister);
         app.route('/api/checkinAndOut/checkin').post(this.checkinAndOutController.checkin);
         app.route('/api/checkinAndOut/checkout/:id').put(this.checkinAndOutController.checkout);
+
+        /* Reportes de niños por edades */
+        app.route('/api/reports/:age').get(this.registerController.excelByAge);
     }
 }

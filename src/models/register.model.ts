@@ -25,6 +25,7 @@ export class RegisterModel extends Model {
     public mdf_member: any;
     public church: any;
     public invited_by_mdf_member: any;
+    public invited_mdf_member: any;
     public inviters_name: any;
     public qr_code: any;
     public terms: any;

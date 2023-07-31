@@ -62,4 +62,24 @@ export class KidsQuery {
             return {ok: false}
         }
     }
+
+    public async indexByAge(age: any){
+        try {
+            const registers = await RegisterModel.findAll({
+                where: {
+                    kid_age: age
+                },
+                include: [
+                    {
+                        model: CheckInAndOutModel,
+                        order: [['createdAt', 'DESC']]
+                    }
+                ]
+            });
+            return {ok: true, registers}
+        } catch (e) {
+            console.log(e);
+            return {ok: false}
+        }
+    }
 }
