@@ -35,7 +35,7 @@ class Server {
         Relationship.init();
 
         // CORS
-        this.app.use(cors());
+        this.app.use(cors({origin:'https://floreriaenvios.com'}));
 
         this.app.use(useragent.express())
         this.app.use(helmet())
