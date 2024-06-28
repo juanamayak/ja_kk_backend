@@ -1,85 +1,78 @@
-// tslint:disable-next-line:no-var-requires
-import fs from "fs";
-
+/** Modulo que contiene las variables de desarrollo */
 require('dotenv').config()
-import express, {Application} from 'express';
-import Relationship from './relationships';
-import bodyParser from 'body-parser';
-import useragent from 'express-useragent';
+//require('dotenv').config({ path: '/root/envs/name_project/.env' })
+/** Librerías que nos ayudaran a crear el servidor */
+import express from 'express'
+import https from 'https'
+import http from 'http'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import helmet from 'helmet'
+import fs from 'fs'
 import fileUpload from 'express-fileupload'
-import helmet from 'helmet';
-import {Routes} from "../routes/routes";
-import {Database} from './database'
-import https from 'https';
-import http from 'http';
-import cors from 'cors';
+import useragent from 'express-useragent'
+import InitializationRelationship from './relationships'
+import { Routes } from '../routes/routes'
+import { Database } from './database'
 
 class Server {
-    private app: Application;
-    private port: string;
-    private server: https.Server | http.Server
-    private routes: Routes = new Routes();
+    /** Inicializamos los componentes primarios que correrá el servidor */
+    public app: express.Application
+    public cors: express.RequestHandler
+    public server: https.Server | http.Server
+    public routes: Routes = new Routes()
     static database: Database = new Database()
 
+    /** Ejecutamos las llaves primarias */
     constructor() {
-        this.app = express();
-        this.securityProtocol();
-        this.config();
-        this.database();
-        this.server = https.createServer(this.app);
-        this.port = process.env.LISTEN_PORT || '8001';
-        this.routes.routes(this.app);
+        this.app = express()
+        this.securityProtocol()
+        this.config()
+        this.database()
+        this.routes.routes(this.app)
     }
-
-    private config() { // configuración inicial del servidor
-        Relationship.init();
-
-        // CORS
-        this.app.use(cors());
-
-        this.app.use(useragent.express())
-        this.app.use(helmet())
-
+    /** Creamos el motor principal del servidor */
+    private config(): void {
+        InitializationRelationship.init();
+        this.app.use(cors())
+        /***
+         * "Helmet" nos ayuda a meter una capa de seguridad a las cabeceras HTTP, por medio de:
+         * X-DNS-Prefetch-Control, X-Frame-Options, x-powered-by,
+         * Strict-Transport-Security,X-Download-Options, X-Content-Type-Options and
+         * xssFilter
+         */
+        this.app.use(useragent.express());
+        this.app.use(fileUpload());
+        this.app.use(helmet());
+        /** Denega el control de "X-Permitted-Cross-Domain-Policies" */
         this.app.use(helmet.permittedCrossDomainPolicies())
+        /** Establecemos nuestras "Referrer Policy" */
         this.app.use(helmet.referrerPolicy({ policy: 'strict-origin' }))
         this.app.use(bodyParser.json({ limit: '50mb' }))
         this.app.use(bodyParser.urlencoded({ extended: false }))
-
-        // Aqui podemos meter más seguridad con Helmet
-        this.app.use(fileUpload());
     }
-
-    private securityProtocol() {
-        if (process.env.MODE === 'dev') {
-            this.server = http.createServer(this.app);
+    /** Configuramos el protocolo http a utilizar (esta configurado bajo el
+     * tipo de desarrollo en que se este ejecutando)
+     */
+    private securityProtocol(): void {
+        if (process.env.MODE == 'dev') {
+            this.server = http.createServer(this.app)
         } else {
-            // @ts-ignore
-            const privateKey = fs.readFileSync(process.env.PRIVATE_SSL, 'utf8')
-            // @ts-ignore
-            const certificate = fs.readFileSync(process.env.CERTIFICATE_SSL, 'utf8')
-            // @ts-ignore
-            const cabundle = fs.readFileSync(process.env.CABUNDLE_SSL, 'utf8')
+            var privateKey = fs.readFileSync(process.env.PRIVATE_SSL, 'utf8')
+            var certificate = fs.readFileSync(process.env.CERTIFICATE_SSL, 'utf8')
+            var cabundle = fs.readFileSync(process.env.CABUNDLE_SSL, 'utf8')
 
-            console.log(privateKey)
-            console.log(certificate)
-            console.log(cabundle)
-            const credentials = { key: privateKey, cert: certificate, ca: cabundle }
+            var credentials = { key: privateKey, cert: certificate, ca: cabundle }
 
-            this.server = https.createServer(credentials, this.app)
-            console.log('https ok')
+            console.log('Server running over the HTTPS protocol');
+            this.server = https.createServer(credentials, this.app);
         }
     }
-
-    listen() {
-        this.app.listen(this.port, () => {
-            console.log('API is running in port: ' + this.port);
-        });
-    }
-
+    /** Valida si la conexión a la base de datos es correcta  */
     private async database() {
-        const connection = await Server.database.connection()
+        let connection = await Server.database.connection()
         console.log(connection.message)
     }
 }
-
-export default Server;
+/** Exporta la configuración del servidor */
+export default new Server().server
