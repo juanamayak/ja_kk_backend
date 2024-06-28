@@ -53,16 +53,17 @@ class Server {
         if (process.env.MODE === 'dev') {
             this.server = http.createServer(this.app);
         } else {
-            // @ts-ignore
             const privateKey = fs.readFileSync(process.env.PRIVATE_SSL, 'utf8')
-            // @ts-ignore
             const certificate = fs.readFileSync(process.env.CERTIFICATE_SSL, 'utf8')
-            // @ts-ignore
             const cabundle = fs.readFileSync(process.env.CABUNDLE_SSL, 'utf8')
 
+            console.log(privateKey)
+            console.log(certificate)
+            console.log(cabundle)
             const credentials = { key: privateKey, cert: certificate, ca: cabundle }
 
             this.server = https.createServer(credentials, this.app)
+            console.log('https ok');
         }
     }
 
